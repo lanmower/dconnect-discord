@@ -4,8 +4,7 @@ require('dotenv').config()
 // init project
 const express = require('express');
 const http = require('http');
-const https = require('https');
-
+const https = require('https'); 
 const app = express();
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -59,7 +58,6 @@ const { TextEncoder, TextDecoder } = require('util');           // node only; na
 const defaultPrivateKey = process.env.SECRET;
 const signatureProvider = new JsSignatureProvider([defaultPrivateKey]);
 const eos = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
-console.log(eos.transact);
 function send(amount, user, author)  {
   console.log("SENDING", user, amount, author);
   return eos.transact({
@@ -120,8 +118,8 @@ function sendeos(amount, user,memo="dconnectlive transaction")  {
   });
 }
  
-async function amount(user) {
-    const account = (await dbo.collection('dconnectlive').findOne({_id:user}));
+async function amount(user, token) {
+    const account = (await dbo.collection('dconnectlive'+token.toUpperCase()).findOne({_id:user}));
     return account?account.amount:0;
 }
 async function contract(contract, action) {
@@ -140,17 +138,34 @@ MongoClient.connect(process.env.url, { useNewUrlParser: true,reconnectTries: 60,
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
-client.on('message', msg => {
-  if(msg.content == 'name') {
-    const name = names[Math.floor(Math.random() * names.length)];
-    client.guilds.find("name", "freedomFirst").channels.find("name", "freedom-first").send(name.word.toLowerCase());
-  }
-});
 client.on('message', async msg => {
   console.log(msg.author.id, msg.content);
   const words = msg.content.replace(/  /gi,' ').split(' ');
   if(words[0] == '&bals') {
-    msg.reply((await amount(msg.author.id))+' ₣₣');
+    const token = words.length==2?words[1]:'FF';
+    if(token == 'FF') {
+      var message = "";
+      var col = (await dbo.collection('dconnectlive'));
+      var size = await col.count();
+      let state = col.find().forEach(async (item)=>{
+	const amnt = await amount(msg.author.id, item._id);
+        message += amnt?amnt+' '+item._id+"\n":'';
+	if(size--==1) msg.reply(message);
+      }); 
+    } else msg.reply((await amount(msg.author.id, token))+' '+token);
+  } else if(words[0] == '&list') {
+    const token = words.length==2?words[1]:'FF';
+    if(token == 'FF') {
+      var message = "";
+      var col = (await dbo.collection('dconnectliveoffers'));
+      var size = await col.count();
+      let state = col.find().forEach(async (item)=>{
+	console.log(item.tokenName, item.amount);
+	const amnt = await amount(msg.author.id, item.tokenName); 
+        message += amnt>Number(item.amount).toFixed(4)?item._id+' '+item.amount+' '+item.tokenName+' for '+item.targetAmount+' '+item.targetName+"\n":'';
+	if(size--==1) msg.reply(message);
+      });
+    } else msg.reply((await amount(msg.author.id, token))+' '+token);
   } else if(words[0] == '&stats') {
     const stats = await dbo.collection('state').findOne();
     var offset = new Date().getTime() - new Date(stats.blockInfo.timestamp).getTime();
@@ -186,7 +201,7 @@ https.get(options, function (res) {
 		const parsedamnt = parseFloat(words[1]);
                 const amnt =Number(parsedamnt/(data.eos.usd*1.05)).toFixed(4);
                 const user = words[2];
-                const before = await amount(msg.author.id);
+                const before = await amount(msg.author.id, "FF");
                 sendres = await send(parsedamnt, id, msg.author.id);
 	if(!sendres.processed || sendres.processed.length == 0) {
 	      msg.reply('failure sending ??');
@@ -194,6 +209,10 @@ https.get(options, function (res) {
 	}
     let memo;
     if(words.length == 4) memo = words[3];
+    if(!memo) {
+        msg.reply(`please add a memo as your last parameter (if this is to discordtipio its your unique withdrawal code from DM`);
+	return;
+    }
     eosres = await sendeos(amnt, user, memo);
     const logs = await dbo.collection('logs');
     const watchCursor = logs.watch();
@@ -223,7 +242,7 @@ https.get(options, function (res) {
             }
         } else {
             console.log('Status:', res.statusCode);
-            console.log(res); 
+            //console.log(res); 
         }
     });
 }).on('error', function (err) {
@@ -234,7 +253,6 @@ https.get(options, function (res) {
     let key = words[0];
     const author = msg.author.id;
     let cont = await contract(app, key);
-    console.log(cont);
     if(!cont) {
         key=app;
         app='dconnectlive';
@@ -246,6 +264,7 @@ https.get(options, function (res) {
     } else {
         words.shift();
     }
+    //console.log(cont);
     for(let index in words) {
 	words[index] = words[index].replace('<@','').replace('!','').replace('>','')
     }
@@ -268,6 +287,7 @@ https.get(options, function (res) {
     blocksBehind: 9,
     expireSeconds: 180
   });
+//console.log(res);
     const logs = await dbo.collection('logs');
     const watchCursor = logs.watch();
     let done;
@@ -303,7 +323,7 @@ console.log(words[6].split('*')[0]);
       const sendWords = user.lastMessage.content.split(' ');
       if(words[3] == '<@336904195619815425>') {
         const res = await send(amnt, user.id);
-    console.log(res.processed);
+    //console.log(res.processed);
     const logs = await dbo.collection('logs');
     const watchCursor = logs.watch();
     let done; 
