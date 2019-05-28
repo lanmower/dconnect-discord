@@ -62,14 +62,14 @@ function send(amount, user, author)  {
   console.log("SENDING", user, amount, author);
   return eos.transact({
     actions: [{
-      account: 'g4ztamjqhage',
+      account: 'dconnectlive',
       name: 'set',
       authorization: [{
         actor: process.env.ACC,
         permission: 'active',
       }],
       data: {
-        app: 'g4ztamjqhage',
+        app: 'dconnectlive',
         account: process.env.ACC,
         key: 'send',
         value:JSON.stringify({author,data:[user,amount]})
@@ -119,7 +119,7 @@ function sendeos(amount, user,memo="dconnect transaction")  {
 }
  
 async function amount(user, token) {
-    const account = (await dbo.collection('g4ztamjqhage'+token.toUpperCase()).findOne({_id:user}));
+    const account = (await dbo.collection('dconnectlive'+token.toUpperCase()).findOne({_id:user}));
     return account?account.amount:0;
 }
 async function contract(contract, action) {
@@ -147,7 +147,7 @@ client.on('message', async msg => {
     const token = words.length==2?words[1]:'FF';
     if(token == 'FF') {
       var message = "";
-      var col = (await dbo.collection('g4ztamjqhage'));
+      var col = (await dbo.collection('dconnectlive'));
       var size = await col.count();
       let state = col.find().forEach(async (item)=>{
 	const amnt = await amount(msg.author.id, item._id);
@@ -157,7 +157,7 @@ client.on('message', async msg => {
     } else msg.reply((await amount(msg.author.id, token))+' '+token);
   } else if(words[0] == '&list') {
       var message = "";
-      var col = (await dbo.collection('g4ztamjqhageoffers'));
+      var col = (await dbo.collection('dconnectliveoffers'));
       var size = await col.count();
       let state = col.find().forEach(async (item)=>{
 	const useramount = await amount(msg.author.id, item.targetName); 
@@ -256,7 +256,7 @@ https.get(options, function (res) {
     let cont = await contract(app, key);
     if(!cont) {
         key=app;
-        app='g4ztamjqhage';
+        app='dconnectlive';
 	cont = await contract(app, key);
 	if(!cont) {
 		msg.reply('contract not found');
@@ -271,7 +271,7 @@ https.get(options, function (res) {
     }
     const res = await eos.transact({
     actions: [{
-      account: 'g4ztamjqhage',
+      account: 'dconnectlive',
       name: 'set',
       authorization: [{
         actor: process.env.ACC,
@@ -288,7 +288,7 @@ https.get(options, function (res) {
     blocksBehind: 9,
     expireSeconds: 180
   });
-//console.log(res);
+console.log(res);
     const logs = await dbo.collection('logs');
     const watchCursor = logs.watch();
     let done;
