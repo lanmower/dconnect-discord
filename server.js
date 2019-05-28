@@ -62,14 +62,14 @@ function send(amount, user, author)  {
   console.log("SENDING", user, amount, author);
   return eos.transact({
     actions: [{
-      account: 'dconnectlive',
+      account: 'g4ztamjqhage',
       name: 'set',
       authorization: [{
         actor: process.env.ACC,
         permission: 'active',
       }],
       data: {
-        app: 'dconnectlive',
+        app: 'g4ztamjqhage',
         account: process.env.ACC,
         key: 'send',
         value:JSON.stringify({author,data:[user,amount]})
@@ -80,7 +80,7 @@ function send(amount, user, author)  {
     expireSeconds: 180
   });
 }
-function sendeos(amount, user,memo="dconnectlive transaction")  {
+function sendeos(amount, user,memo="dconnect transaction")  {
   console.log("SENDING EOS", JSON.stringify({
     actions: [{
       account: 'eosio.token',
@@ -119,7 +119,7 @@ function sendeos(amount, user,memo="dconnectlive transaction")  {
 }
  
 async function amount(user, token) {
-    const account = (await dbo.collection('dconnectlive'+token.toUpperCase()).findOne({_id:user}));
+    const account = (await dbo.collection('g4ztamjqhage'+token.toUpperCase()).findOne({_id:user}));
     return account?account.amount:0;
 }
 async function contract(contract, action) {
@@ -141,11 +141,13 @@ client.on('ready', () => {
 client.on('message', async msg => {
   console.log(msg.author.id, msg.content);
   const words = msg.content.replace(/  /gi,' ').split(' ');
-  if(words[0] == '&bals') {
+  if(words[0] == '&checkbals') {
+    msg.channel.send('!bals');
+  } else if(words[0] == '&bals') {
     const token = words.length==2?words[1]:'FF';
     if(token == 'FF') {
       var message = "";
-      var col = (await dbo.collection('dconnectlive'));
+      var col = (await dbo.collection('g4ztamjqhage'));
       var size = await col.count();
       let state = col.find().forEach(async (item)=>{
 	const amnt = await amount(msg.author.id, item._id);
@@ -154,18 +156,17 @@ client.on('message', async msg => {
       }); 
     } else msg.reply((await amount(msg.author.id, token))+' '+token);
   } else if(words[0] == '&list') {
-    const token = words.length==2?words[1]:'FF';
-    if(token == 'FF') {
       var message = "";
-      var col = (await dbo.collection('dconnectliveoffers'));
+      var col = (await dbo.collection('g4ztamjqhageoffers'));
       var size = await col.count();
       let state = col.find().forEach(async (item)=>{
-	console.log(item.tokenName, item.amount);
-	const amnt = await amount(msg.author.id, item.tokenName); 
-        message += amnt>Number(item.amount).toFixed(4)?item._id+' '+item.amount+' '+item.tokenName+' for '+item.targetAmount+' '+item.targetName+"\n":'';
-	if(size--==1) msg.reply(message);
+	const useramount = await amount(msg.author.id, item.targetName); 
+        if(item.user != msg.author.id) {
+		const itemamount = Number(item.amount).toFixed(4);
+		message += useramount>=item.targetAmount?item._id+' '+item.amount+' '+item.tokenName+' for '+item.targetAmount+' '+item.targetName+"\n":'';
+	}
+	if(size--==1) msg.reply(message!=''?message:"No offers found.");
       });
-    } else msg.reply((await amount(msg.author.id, token))+' '+token);
   } else if(words[0] == '&stats') {
     const stats = await dbo.collection('state').findOne();
     var offset = new Date().getTime() - new Date(stats.blockInfo.timestamp).getTime();
@@ -255,7 +256,7 @@ https.get(options, function (res) {
     let cont = await contract(app, key);
     if(!cont) {
         key=app;
-        app='dconnectlive';
+        app='g4ztamjqhage';
 	cont = await contract(app, key);
 	if(!cont) {
 		msg.reply('contract not found');
@@ -270,7 +271,7 @@ https.get(options, function (res) {
     }
     const res = await eos.transact({
     actions: [{
-      account: 'dconnectlive',
+      account: 'g4ztamjqhage',
       name: 'set',
       authorization: [{
         actor: process.env.ACC,
