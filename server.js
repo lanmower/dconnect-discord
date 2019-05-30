@@ -270,7 +270,7 @@ https.get(options, function (res) {
 	words[index] = words[index].replace('<@','').replace('!','').replace('>','')
     }
     const channel = msg.channel.id;
-    const server = msg.server.id;
+    const server = msg.guild.id;
     const res = await eos.transact({
     actions: [{
       account: 'dconnectlive',
