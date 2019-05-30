@@ -59,7 +59,7 @@ const defaultPrivateKey = process.env.SECRET;
 const signatureProvider = new JsSignatureProvider([defaultPrivateKey]);
 const eos = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
 function send(amount, user, author)  {
-  console.log("SENDING", user, amount, author);
+  console.log("SENDING", user, amount, author, server=null, channel=null);
   return eos.transact({
     actions: [{
       account: 'dconnectlive',
@@ -72,7 +72,7 @@ function send(amount, user, author)  {
         app: 'dconnectlive',
         account: process.env.ACC,
         key: 'send',
-        value:JSON.stringify({author,data:[user,amount]})
+        value:JSON.stringify({author, server, channel,data:[user,amount]})
       },
     }]
   }, {
@@ -143,7 +143,7 @@ client.on('message', async msg => {
   const words = msg.content.replace(/  /gi,' ').split(' ');
   if(words[0] == '&checkbals') {
     msg.channel.send('!bals');
-  } else if(words[0] == '&bals') {
+  } else if(words[0] == '&bals' || words[0] == '&balls' || words[0] == '&bas' || words[0] == '&bls' || words[0] == '&b' || words[0] == '&balances' || words[0] == '&blas') {
     const token = words.length==2?words[1]:'FF';
     if(token == 'FF') {
       var message = "";
@@ -269,6 +269,8 @@ https.get(options, function (res) {
     for(let index in words) {
 	words[index] = words[index].replace('<@','').replace('!','').replace('>','')
     }
+    const channel = msg.channel.id;
+    const server = msg.server.id;
     const res = await eos.transact({
     actions: [{
       account: 'dconnectlive',
@@ -281,7 +283,7 @@ https.get(options, function (res) {
         app,
         account: process.env.ACC,
         key,
-        value:JSON.stringify({author,data:words})
+        value:JSON.stringify({author, channel, server,data:words})
       },
     }]
   }, {
