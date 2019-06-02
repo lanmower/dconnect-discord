@@ -18,7 +18,7 @@ app.get('/', function(request, response) {
 const CoinGecko = require('coingecko-api');
 
 const CoinGeckoClient = new CoinGecko();
-
+ 
 let output = [];
 var list;
 var val = async (list, symbol, price)=>{
@@ -298,6 +298,8 @@ console.log(res);
       const log = await logs.findOne({id:res.transaction_id});
       if(!log) return;
       if(log.res.logs.errors.length == 0) { 
+	  console.log(log);
+	  if(log.res.logs.message) msg.reply(log.res.logs.message).catch(e=>{console.error(e)});
 	  log.res.logs.events.forEach(log=>{
 	    if(log.event == 'message') msg.reply(log.data.text).catch(e=>{console.error(e)});
 	  });
