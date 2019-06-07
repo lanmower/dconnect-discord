@@ -12,10 +12,10 @@ module.exports = {
         const channel = msg.channel ? msg.channel.id : null;
         const server = msg.guild ? msg.guild.id : null;
         try {
-        const log = await runContract(app, key, JSON.stringify({ author, channel, server, data: words }), dbo);
+            const log = await runContract(app, key, JSON.stringify({ author, channel, server, data: words }), dbo);
+            if (log.res.logs.message) msg.reply(log.res.logs.message).catch(e => { console.error(e) });
         } catch(e) {
             msg.reply(e.message);
         }
-        if (log.res.logs.message) msg.reply(log.res.logs.message).catch(e => { console.error(e) });
     }
 }
