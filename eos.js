@@ -14,6 +14,13 @@ async function contract(contract, action, dbo) {
 }
 
 async function runContract(app, key, data, dbo) {
+    let cont = await contract(app, key, dbo);
+    if (!cont) {
+        cont = await contract('dconnectlive', app, dbo);
+        if (!cont) throw new Error('contract not found');
+        else words.shift();
+    }
+
     return await run({
         actions: [{
             account: 'dconnectlive',
