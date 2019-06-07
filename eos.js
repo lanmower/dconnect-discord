@@ -13,7 +13,7 @@ async function contract(contract, action, dbo) {
     return (await contracts.findOne({ contract, action }));
 }
 
-async function runContract(app, key, data, dbo) {
+async function runContract(app, key, input, dbo) {
     let cont = await contract(app, key, dbo);
     if (!cont) {
         cont = await contract('dconnectlive', app, dbo);
@@ -21,11 +21,11 @@ async function runContract(app, key, data, dbo) {
     } else {
         //data.data.shift();
     }
-    console.log(data);
+    console.log(input);
     if (cont.code && cont.view) {
         const http = require('http');
         const data = JSON.stringify({
-            payload: JSON.stringify(data),
+            payload: JSON.stringify(input),
             code: cont.code,
             contract: app
         })
