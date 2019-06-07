@@ -30,7 +30,7 @@ async function runContract(app, key, input, dbo) {
                 code: cont.code,
                 contract: app
             })
-
+            console.log(data);
             const options = {
                 hostname: 'localhost',
                 port: 3000,
