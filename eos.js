@@ -62,12 +62,10 @@ function run(data, dbo) {
             if (!log) reject('failed to process action');
             if (log.res.logs.errors.length == 0) {
                 console.log(log);
-                if (log.res.logs.message) msg.reply(log.res.logs.message).catch(e => { console.error(e) });
                 resolve(log);
                 clearInterval(watcher);
             } else {
-                msg.reply(`failed ` + JSON.stringify(log.res.logs));
-                resolve(log);
+                reject(log);
                 clearInterval(watcher);
             }
             done = true;

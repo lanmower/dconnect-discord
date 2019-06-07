@@ -6,18 +6,6 @@ module.exports = {
         let app = words.shift().split('&')[1];
         let key = words[0];
         const author = msg.author.id;
-        let cont = await contract(app, key, dbo);
-        if (!cont) {
-            key = app;
-            app = 'dconnectlive';
-            cont = await contract(app, key, dbo);
-            if (!cont) {
-                msg.reply('contract not found');
-                return;
-            }
-        } else {
-            words.shift();
-        }
         console.log(app, cont);
         for (let index in words) {
             words[index] = words[index].replace('<@', '').replace('!', '').replace('>', '')
@@ -65,8 +53,7 @@ module.exports = {
             req.end()
             return;
         }
-        console.log('running');
-        await runContract(app, key, JSON.stringify({ author, channel, server, data: words }), dbo);
-
+        const log = await runContract(app, key, JSON.stringify({ author, channel, server, data: words }), dbo);
+        if (log.res.logs.message) msg.reply(log.res.logs.message).catch(e => { console.error(e) });
     }
 }
