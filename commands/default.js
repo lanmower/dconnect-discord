@@ -1,7 +1,4 @@
-async function contract(contract, action, dbo) {
-    let contracts = await dbo.collection('contract');
-    return (await contracts.findOne({ contract, action }));
-}
+const { runContract, contract } = require('../eos.js');
 module.exports = {
     commands: ['default'],
     run: async (msg, dbo) => {
@@ -21,7 +18,7 @@ module.exports = {
         } else {
             words.shift();
         }
-        //console.log(cont);
+        console.log(app, cont);
         for (let index in words) {
             words[index] = words[index].replace('<@', '').replace('!', '').replace('>', '')
         }
@@ -68,51 +65,8 @@ module.exports = {
             req.end()
             return;
         }
-        const res = await eos.transact({
-            actions: [{
-                account: 'dconnectlive',
-                name: 'set',
-                authorization: [{
-                    actor: process.env.ACC,
-                    permission: 'active',
-                }],
-                data: {
-                    app,
-                    account: process.env.ACC,
-                    key,
-                    value: JSON.stringify({ author, channel, server, data: words })
-                },
-            }]
-        }, {
-                blocksBehind: 9,
-                expireSeconds: 180
-            });
+        console.log('running');
+        await runContract(app, key, JSON.stringify({ author, channel, server, data: words }), dbo);
 
-        const logs = await dbo.collection('logs');
-        const watchCursor = logs.watch();
-        let done;
-        const watcher = setInterval(async () => {
-            const log = await logs.findOne({ id: res.transaction_id });
-            if (!log) return;
-            if (log.res.logs.errors.length == 0) {
-                console.log(log);
-                if (log.res.logs.message) msg.reply(log.res.logs.message).catch(e => { console.error(e) });
-                log.res.logs.events.forEach(log => {
-                    if (log.event == 'message') msg.reply(log.data.text).catch(e => { console.error(e) });
-                });
-                clearInterval(watcher);
-            } else {
-                msg.reply(`failed ` + JSON.stringify(log.res.logs));
-                clearInterval(watcher);
-            }
-            done = true;
-            watchCursor.close();
-        }, 500);
-        setTimeout(() => {
-            if (!done) {
-                clearInterval(watcher);
-                msg.reply(`timeout waiting for response`);
-            }
-        }, 30000);
     }
 }

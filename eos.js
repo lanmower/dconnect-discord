@@ -1,5 +1,3 @@
-
-
 const ecc = require('eosjs-ecc');
 const { Api, JsonRpc, RpcError } = require('eosjs');
 const JsSignatureProvider = require('eosjs/dist/eosjs-jssig').default;  // development only
@@ -10,10 +8,73 @@ const defaultPrivateKey = process.env.SECRET;
 const signatureProvider = new JsSignatureProvider([defaultPrivateKey]);
 const eos = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
 
+async function contract(contract, action, dbo) {
+    let contracts = await dbo.collection('contract');
+    return (await contracts.findOne({ contract, action }));
+}
+
+async function runContract(app, key, data, dbo) {
+    return await run({
+        actions: [{
+            account: 'dconnectlive',
+            name: 'set',
+            authorization: [{
+                actor: process.env.ACC,
+                permission: 'active',
+            }],
+            data: {
+                app,
+                account: process.env.ACC,
+                key,
+                value: JSON.stringify(data)
+            },
+        }]
+    }, dbo);
+}
+
+
+
+function run(data, dbo) {
+    return new Promise(async (resolve, reject) => {
+        const logs = await dbo.collection('logs');
+        const watchCursor = logs.watch();
+        const res = await eos.transact(data, {
+            blocksBehind: 9,
+            expireSeconds: 180
+        });
+        let done;
+        const start = new Date().getTime();
+        const watcher = setInterval(async () => {
+            if (new Date().getTime() - 30000 > start) {
+                if (!done) {
+                    clearInterval(watcher);
+                    reject(`timeout waiting for response`);
+                }
+            }
+            const log = await logs.findOne({ id: res.transaction_id });
+            if (!log) reject('failed to process action');
+            if (log.res.logs.errors.length == 0) {
+                console.log(log);
+                if (log.res.logs.message) msg.reply(log.res.logs.message).catch(e => { console.error(e) });
+                resolve(log);
+                clearInterval(watcher);
+            } else {
+                msg.reply(`failed ` + JSON.stringify(log.res.logs));
+                resolve(log);
+                clearInterval(watcher);
+            }
+            done = true;
+            watchCursor.close();
+        }, 500);
+    });
+}
+
 module.exports = {
-    send: function (amount, user, author) {
+    contract,
+    runContract,
+    send: async function (amount, user, author, dbo) {
         console.log("SENDING", user, amount, author, server = null, channel = null);
-        return eos.transact({
+        return await run({
             actions: [{
                 account: 'dconnectlive',
                 name: 'set',
@@ -31,25 +92,10 @@ module.exports = {
         }, {
                 blocksBehind: 9,
                 expireSeconds: 180
-            });
-    }, sendeos: function (amount, user, memo = "dconnect transaction") {
-        console.log("SENDING EOS", JSON.stringify({
-            actions: [{
-                account: 'eosio.token',
-                name: 'transfer',
-                authorization: [{
-                    actor: process.env.ACC,
-                    permission: 'active',
-                }],
-                data: {
-                    from: process.env.ACC,
-                    to: user,
-                    quantity: amount + ' EOS',
-                    memo
-                },
-            }]
-        }));
-        return eos.transact({
+            }, dbo);
+    }, sendeos: async function (amount, user, memo = "dconnect transaction", dbo) {
+        console.log("SENDING EOS");
+        return await run({
             actions: [{
                 account: 'eosio.token',
                 name: 'transfer',
@@ -67,6 +113,6 @@ module.exports = {
         }, {
                 blocksBehind: 9,
                 expireSeconds: 180
-            });
+            }, dbo);
     }
 }

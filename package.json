@@ -10,11 +10,12 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "coingecko-api": "^1.0.5",
     "discord.js": "^11.4.2",
     "dotenv": "^7.0.0",
     "eosjs": "beta",
-    "coingecko-api": "^1.0.5",
     "express": "^4.16.4",
+    "http": "0.0.0",
     "mongodb": "^3.2.4",
     "node-fetch": "^2.3.0"
   },

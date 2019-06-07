@@ -6,18 +6,18 @@ app.use(express.static('public'));
 const plugins = [];
 var normalizedPath = require("path").join(__dirname, "commands");
 
-require("fs").readdirSync(normalizedPath).forEach(function(file) {
+require("fs").readdirSync(normalizedPath).forEach(function (file) {
   plugins.push(require("./commands/" + file));
 });
 async function start() {
   console.log('starting mongo');
   const commands = {};
   const authors = {};
-  plugins.forEach((plugin)=>{
-    if(plugin.commands) plugin.commands.forEach((command)=>{
+  plugins.forEach((plugin) => {
+    if (plugin.commands) plugin.commands.forEach((command) => {
       commands[command] = plugin;
     });
-    if(plugin.authors) plugin.authors.forEach((author)=>{
+    if (plugin.authors) plugin.authors.forEach((author) => {
       authors[author] = plugin;
     });
   })
@@ -31,21 +31,55 @@ async function start() {
   });
 
   const dbo = await require('./mongo.js')();
+
+  const events = {
+    MESSAGE_REACTION_ADD: 'messageReactionAdd',
+    MESSAGE_REACTION_REMOVE: 'messageReactionRemove',
+  };
+
+  client.on('raw', async event => {
+    if (!events.hasOwnProperty(event.t)) return;
+
+    const { d: data } = event;
+    const user = client.users.get(data.user_id);
+    const channel = client.channels.get(data.channel_id) || await user.createDM();
+
+    if (channel.messages.has(data.message_id)) return;
+
+    const message = await channel.fetchMessage(data.message_id);
+    const emojiKey = (data.emoji.id) ? `${data.emoji.name}:${data.emoji.id}` : data.emoji.name;
+    let reaction = message.reactions.get(emojiKey);
+
+    if (!reaction) {
+      const emoji = new Discord.Emoji(client.guilds.get(data.guild_id), data.emoji);
+      reaction = new Discord.MessageReaction(message, emoji, 1, data.user_id === client.user.id);
+    }
+
+    client.emit(events[event.t], reaction, user);
+  });
+
+  client.on('messageReactionAdd', (reaction, user) => {
+    console.log(`${user.username} reacted with "${reaction.emoji.name}" to ${reaction.message.id}.`);
+  });
+
+  client.on('messageReactionRemove', (reaction, user) => {
+    console.log(`${user.username} removed their "${reaction.emoji.name}" reaction.`);
+  });
+
   client.on('message', async msg => {
     console.log(msg.author.id, msg.content);
 
     const words = msg.content.replace(/  /gi, ' ').split(' ');
     let ran = false;
-    console.log('checking against plugins');
     if (msg.content[0] == '&') {
       const command = msg.content.replace('&', '').split(' ')[0];
       ran = true;
-      console.log("COMMAND RUN", commands[command]);
-      if(commands[command]) await commands[command].run(msg, dbo);
-      else await commands['default'].run(msg,dbo);
+      //console.log("COMMAND RUN", command, commands, commands[command]);
+      if (commands[command]) await commands[command].run(msg, dbo);
+      else await commands['default'].run(msg, dbo);
     } else {
       const author = msg.author.id;
-      if(authors[author]) authors[author].run(msg,dbo)
+      if (authors[author]) authors[author].run(msg, dbo)
     }
   });
 
