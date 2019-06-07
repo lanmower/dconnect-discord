@@ -47,7 +47,7 @@ async function runContract(app, key, input, dbo) {
                 res.on('end', () => {
                     data = JSON.parse(data);
                     console.log(data, data.logs);
-                    resolve({ res: data.logs.message });
+                    resolve({ data });
                 });
                 res.on('data', (d) => {
                     data += d ? d : '';
