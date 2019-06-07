@@ -23,44 +23,45 @@ async function runContract(app, key, input, dbo) {
     }
     console.log(input);
     if (cont.code && cont.view) {
-        const http = require('http');
-        const data = JSON.stringify({
-            payload: JSON.stringify(input),
-            code: cont.code,
-            contract: app
-        })
-
-        const options = {
-            hostname: 'localhost',
-            port: 3000,
-            path: '/test',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Content-Length': data.length
-            }
-        }
-
-        const req = http.request(options, (res) => {
-            console.log(`statusCode: ${res.statusCode}`)
-            let data = '';
-            res.on('end', () => {
-                console.log(data);
-                return ({res:JSON.parse(data).logs.message});
-            });
-            res.on('data', (d) => {
-                console.log(d);
-                data += d ? d : '';
+        return new Promise((resolve, reject) => {
+            const http = require('http');
+            const data = JSON.stringify({
+                payload: JSON.stringify(input),
+                code: cont.code,
+                contract: app
             })
-        })
 
-        req.on('error', (error) => {
-            throw error;
-        })
+            const options = {
+                hostname: 'localhost',
+                port: 3000,
+                path: '/test',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': data.length
+                }
+            }
 
-        req.write(data)
-        req.end()
-        return;
+            const req = http.request(options, (res) => {
+                console.log(`statusCode: ${res.statusCode}`)
+                let data = '';
+                res.on('end', () => {
+                    console.log(data);
+                    resolve({ res: JSON.parse(data).logs.message });
+                });
+                res.on('data', (d) => {
+                    console.log(d);
+                    data += d ? d : '';
+                })
+            })
+
+            req.on('error', (error) => {
+                reject(error);
+            })
+
+            req.write(data)
+            req.end()
+        });
     }
 
 
