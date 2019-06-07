@@ -1,4 +1,4 @@
-async function amount(user, token) {
+async function amount(user, token, dbo) {
     const account = (await dbo.collection('dconnectlive' + token.toUpperCase()).findOne({ _id: user }));
     return account ? account.amount : 0;
 }
