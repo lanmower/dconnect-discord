@@ -19,9 +19,9 @@ async function runContract(app, key, data, dbo) {
         cont = await contract('dconnectlive', app, dbo);
         if (!cont) throw new Error('contract not found');
     } else {
-        data.data.shift();
+        //data.data.shift();
     }
-    data.data.shift();
+    console.log(data);
     if (cont.code && cont.view) {
         const http = require('http');
         const data = JSON.stringify({
