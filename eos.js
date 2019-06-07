@@ -15,7 +15,11 @@ async function contract(contract, action, dbo) {
 
 async function runContract(app, key, data, dbo) {
     let cont = await contract(app, key, dbo);
-    if(!cont) throw new Error('contract not found');
+    if (!cont) {
+        cont = await contract('dconnectlive', app, dbo);
+        if (!cont) throw new Error('contract not found');
+        else words.shift();
+    }
     if (cont.code && cont.view) {
         const http = require('http');
         console.log(words);
@@ -58,11 +62,6 @@ async function runContract(app, key, data, dbo) {
         return;
     }
 
-    if (!cont) {
-        cont = await contract('dconnectlive', app, dbo);
-        if (!cont) throw new Error('contract not found');
-        else words.shift();
-    }
 
     return await run({
         actions: [{
