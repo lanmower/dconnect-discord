@@ -43,14 +43,12 @@ async function runContract(app, key, input, dbo) {
             }
 
             const req = http.request(options, (res) => {
-                console.log(`statusCode: ${res.statusCode}`)
                 let data = '';
                 res.on('end', () => {
-                    console.log(JSON.parse(data).logs);
+                    console.log(JSON.parse(data));
                     resolve({ res: JSON.parse(data).logs.message });
                 });
                 res.on('data', (d) => {
-                    console.log(d);
                     data += d ? d : '';
                 })
             })
