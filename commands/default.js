@@ -15,8 +15,8 @@ module.exports = {
             const log = await runContract(app, key, { author, channel, server, data: words }, dbo);
             if (log.res.logs.message) msg.reply(log.res.logs.message).catch(e => { console.error(e) });
         } catch(e) {
-            msg.reply(e.message + err.stack);
-            console.log(err.stack);
+            msg.reply(e.message + e.stack);
+            console.log(e.stack);
         }
     }
 }
