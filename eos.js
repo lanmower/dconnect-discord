@@ -15,6 +15,49 @@ async function contract(contract, action, dbo) {
 
 async function runContract(app, key, data, dbo) {
     let cont = await contract(app, key, dbo);
+    if(!cont) throw new Error('contract not found');
+    if (cont.code && cont.view) {
+        const http = require('http');
+        console.log(words);
+        const data = JSON.stringify({
+            payload: JSON.stringify(words),
+            code: cont.code,
+            contract: app
+        })
+
+        const options = {
+            hostname: 'localhost',
+            port: 3000,
+            path: '/test',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': data.length
+            }
+        }
+
+        const req = http.request(options, (res) => {
+            console.log(`statusCode: ${res.statusCode}`)
+            let data = '';
+            res.on('end', () => {
+                console.log(data);
+                return ({res:JSON.parse(data).logs.message});
+            });
+            res.on('data', (d) => {
+                console.log(d);
+                data += d ? d : '';
+            })
+        })
+
+        req.on('error', (error) => {
+            throw error;
+        })
+
+        req.write(data)
+        req.end()
+        return;
+    }
+
     if (!cont) {
         cont = await contract('dconnectlive', app, dbo);
         if (!cont) throw new Error('contract not found');
