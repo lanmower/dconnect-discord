@@ -46,7 +46,7 @@ async function runContract(app, key, input, dbo) {
                 console.log(`statusCode: ${res.statusCode}`)
                 let data = '';
                 res.on('end', () => {
-                    console.log(data);
+                    console.log(JSON.parse(data).logs);
                     resolve({ res: data.logs.message });
                 });
                 res.on('data', (d) => {
