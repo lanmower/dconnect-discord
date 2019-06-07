@@ -26,7 +26,7 @@ async function runContract(app, key, input, dbo) {
         return new Promise((resolve, reject) => {
             const http = require('http');
             const data = JSON.stringify({
-                payload: JSON.stringify(input),
+                payload: JSON.stringify(input.data),
                 code: cont.code,
                 contract: app
             })
