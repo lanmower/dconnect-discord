@@ -75,7 +75,7 @@ async function runContract(app, key, input, dbo) {
                 app,
                 account: process.env.ACC,
                 key,
-                value: JSON.stringify(data)
+                value: JSON.stringify(input)
             },
         }]
     }, dbo);
