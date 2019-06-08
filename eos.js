@@ -102,7 +102,7 @@ function run(data, dbo) {
             }
             const log = await logs.findOne({ id: res.transaction_id });
             if (!log) reject('failed to process action');
-            if (log.res.logs.errors.length == 0) {
+            if (log.logs.errors.length == 0) {
                 console.log(log);
                 resolve(log);
                 clearInterval(watcher);
