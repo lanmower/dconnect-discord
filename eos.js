@@ -26,7 +26,7 @@ async function runContract(app, key, input, dbo) {
         return new Promise((resolve, reject) => {
             const http = require('http');
             const data = JSON.stringify({
-                payload: JSON.stringify(input),
+                payload: JSON.stringify(input.data),
                 code: cont.code,
                 contract: app
             })
@@ -46,8 +46,12 @@ async function runContract(app, key, input, dbo) {
                 let data = '';
                 res.on('end', () => {
                     data = JSON.parse(data);
+<<<<<<< HEAD
                     console.log(data, data.logs);
                     resolve({ data });
+=======
+                    resolve(data);
+>>>>>>> 10e1e04167b45c947707b98253fe4edd27974d6b
                 });
                 res.on('data', (d) => {
                     data += d ? d : '';
