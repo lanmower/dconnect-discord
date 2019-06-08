@@ -92,6 +92,7 @@ function run(data, dbo) {
             blocksBehind: 9,
             expireSeconds: 180
         });
+        console.log(res);
         let done;
         const start = new Date().getTime();
         const watcher = setInterval(async () => {
