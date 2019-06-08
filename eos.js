@@ -87,6 +87,7 @@ function run(data, dbo) {
     return new Promise(async (resolve, reject) => {
         const logs = await dbo.collection('logs');
         const watchCursor = logs.watch();
+        console.log("TRYING",data);
         const res = await eos.transact(data, {
             blocksBehind: 9,
             expireSeconds: 180
@@ -102,12 +103,11 @@ function run(data, dbo) {
             }
             const log = await logs.findOne({ id: res.transaction_id });
             if (!log) return;
+            console.log("LOG",log);
             if (log.logs.errors.length == 0) {
-                console.log(log);
                 resolve(log);
                 clearInterval(watcher);
             } else {
-                console.error(log);
                 reject(log);
                 clearInterval(watcher);
             }
