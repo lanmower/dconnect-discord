@@ -4,7 +4,7 @@ async function amount(user, token, dbo) {
 }
 const https = require('https');
 const val = require('../value.js');
-const { send, sendEos } = require('../eos.js');
+const { send, sendeos } = require('../eos.js');
 
 module.exports = {
     commands: ['convert', 'conv', 'con', 'c'],
