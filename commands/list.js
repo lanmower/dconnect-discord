@@ -10,7 +10,7 @@ module.exports = {
         let message = "";
         let col = (await dbo.collection('dconnectliveoffers'));
         let size = 0;
-        let state = col.find().forEach(async (item) => {
+        let state = await col.find().forEach(async (item) => {
             const useramount = await amount(msg.author.id, item.targetName, dbo);
             if (item.user != msg.author.id) {
                 const itemamount = Number(item.amount).toFixed(4);
