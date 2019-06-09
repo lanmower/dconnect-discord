@@ -21,8 +21,7 @@ module.exports = {
         } catch(e) {
             console.error(e);
             if(e.res && e.res.logs.errors) msg.reply(e.res.logs.errors.join(';\n'));
-            else msg.reply(JSON.stringify(e));
-
+            else msg.reply(e.message);
         }
     }
 }
