@@ -166,9 +166,6 @@ module.exports = {
                     memo
                 },
             }]
-        }, {
-                blocksBehind: 9,
-                expireSeconds: 180
-            }, dbo);
+        }, dbo);
     }
 }
