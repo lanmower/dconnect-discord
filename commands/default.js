@@ -17,7 +17,7 @@ module.exports = {
             console.log("LOG", log);
             let message = log.res.logs.message;
             if(message == '') message = null;
-            if (log && log.logs.message) {
+            if (log && log.res.logs.message) {
                 msg.reply(`message \n\`https://bloks.io/transaction/05a95727de597af51026bfffd950afce2d3a53de53afea15270e5961afa02dc8\``).catch(e => { console.error(e) });
             }
         } catch(e) {
