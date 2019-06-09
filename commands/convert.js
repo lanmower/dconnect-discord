@@ -42,29 +42,7 @@ module.exports = {
                             return;
                         }
                         eosres = await sendeos(amnt, user, memo, dbo);
-                        const logs = await dbo.collection('logs');
-                        const watchCursor = logs.watch();
-                        let done;
-                        const watcher = setInterval(async () => {
-                            let log = await logs.findOne({ id: eosres.transaction_id });
-
-                            if (!log) return;
-                            if (log.res) {
-                                msg.reply(`sent ${amnt} EOS to ${user}, deducted ${parsedamnt} ₣₣`);
-                                clearInterval(watcher);
-                            } else {
-                                msg.reply(`transfer failed ` + JSON.stringify(log.res.logs));
-                                clearInterval(watcher);
-                            }
-                            done = true;
-                            watchCursor.close();
-                        }, 500);
-                        setTimeout(() => {
-                            if (!done) {
-                                clearInterval(watcher);
-                                msg.reply(`timeout waiting for response`);
-                            }
-                        }, 30000);
+                        msg.reply(eosres.res.logs.message);
                     } catch (e) {
                         console.error(e);
                     }
