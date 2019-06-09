@@ -5,6 +5,7 @@ const CoinGeckoClient = new CoinGecko();
 var list;
 const val = async (symbol, price) => {
   try {
+    console.log("CHECKING:",symbol, price);
     if (!list) await run();
     var item = list.filter((item) => {
       return item.symbol == symbol
