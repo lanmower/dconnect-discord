@@ -8,8 +8,7 @@ const val = async (symbol, price) => {
     console.log("CHECKING:",symbol, price);
     if (!list) await run();
     var item = list.filter((item) => {
-      console.log(item.symbol);
-      return item.symbol == symbol
+      return item.symbol == symbol.toLowerCase();
     })[0];
     var data = (await CoinGeckoClient.coins.fetch(item.id)).data;
     let p;
