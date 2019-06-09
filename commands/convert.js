@@ -31,7 +31,7 @@ module.exports = {
                         const user = words[2];
                         const before = await amount(msg.author.id, "FF", dbo);
                         sendres = await send(parsedamnt, id, dbo, msg.author.id);
-                        if (!sendres.processed || sendres.processed.length == 0) {
+                        if (!sendres.res.logs.events || sendres.res.logs.events.length == 0) {
                             msg.reply('failure sending ?');
                             return;
                         }
