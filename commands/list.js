@@ -17,7 +17,8 @@ module.exports = {
                 message += useramount >= item.targetAmount ? item._id + ' ' + item.amount + ' ' + item.tokenName + ' for ' + item.targetAmount + ' ' + item.targetName + "\n" : '';
             }
             if (size-- == 1) msg.reply(message != '' ? message : "No offers found.");
-            else msg.reply(message).react('🍎');
+            
         });
+        console.log(msg.reply(message));
     }
 }
