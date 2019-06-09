@@ -109,7 +109,7 @@ function run(data, dbo) {
             }
             const log = await logs.findOne({ id: res.transaction_id });
             if (!log) return;
-            console.log("LOG",log);
+            //console.log("LOG",log);
             
             if (log.res.logs.errors.length == 0) {
                 resolve(log);
