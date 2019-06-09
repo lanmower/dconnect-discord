@@ -15,12 +15,12 @@ module.exports = {
             if (item.user != msg.author.id) {
                 const itemamount = Number(item.amount).toFixed(4);
                 if(useramount >= item.targetAmount) {
-                    msg.reply(item._id + ' ' + item.amount + ' ' + item.tokenName + ' for ' + item.targetAmount + ' ' + item.targetName + "\n");
+                    console.log(msg.reply(item._id + ' ' + item.amount + ' ' + item.tokenName + ' for ' + item.targetAmount + ' ' + item.targetName + "\n").react('😄'));
                 };
             }
             if (size-- == 1) msg.reply(message != '' ? message : "No offers found.");
             
         });
-        //console.log();
+        
     }
 }
