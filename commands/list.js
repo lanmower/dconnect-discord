@@ -26,7 +26,7 @@ module.exports = {
                         collected.forEach(async reaction=>{
                             if (reaction.emoji.name === '🆗') {
                                 const mes = await runContract('dconnectlive', 'accept', { author:msg.author.id, channel:msg.channel?msg.channel.id:null, server:msg.server?msg.server.id:null, data: [item._id] }, dbo);
-                                msg.reply(mes);
+                                msg.reply(mes.res.logs.message);
                             }
                         });
                     }).catch(collected => {
