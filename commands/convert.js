@@ -30,6 +30,7 @@ module.exports = {
                         const amnt = Number(parsedamnt / (data.eos.usd * 1.05)).toFixed(4);
                         const user = words[2];
                         const before = await amount(msg.author.id, "FF", dbo);
+                        console.log('sending ff');
                         sendres = await send(parsedamnt, id, dbo, msg.author.id);
                         if (!sendres.res.logs.events || sendres.res.logs.events.length == 0) {
                             msg.reply('failure sending ?');
@@ -41,9 +42,11 @@ module.exports = {
                             msg.reply(`please add a memo as your last parameter (if this is to discordtipio its your unique withdrawal code from DM`);
                             return;
                         }
+                        console.log('sending eos');
                         eosres = await sendeos(amnt, user, memo, dbo);
-                        msg.reply(eosres.res.logs.message);
+                        msg.reply('${amnt} sent to ${user}');
                     } catch (e) {
+                        msg.reply(e.message);
                         console.error(e);
                     }
                 } else {
