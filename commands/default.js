@@ -14,6 +14,7 @@ module.exports = {
         try {
             console.log("RUNNING", app, key);
             const log = await runContract(app, key, { author, channel, server, data: words }, dbo);
+            console.log("LOG", log);
             let message = log.logs.message;
             if(message == '') message = null;
             if (log && log.logs.message) {
