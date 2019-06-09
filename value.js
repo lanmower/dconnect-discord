@@ -3,7 +3,7 @@ const CoinGecko = require('coingecko-api');
 const CoinGeckoClient = new CoinGecko();
 
 var list;
-const val = async (list, symbol, price) => {
+const val = async (symbol, price) => {
   try {
     if (!list) await run();
     var item = list.filter((item) => {

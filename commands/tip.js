@@ -7,7 +7,7 @@ module.exports = {
         const words = msg.content.split(' ');
         if (words[2] == 'sent') {
             console.log(words[6].split('*')[0]);
-            const amnt = (await val(list, words[4].split('*')[0], 1)) * parseFloat(msg.content.split('$')[1].split(')')[0]);
+            const amnt = (await val(words[4].split('*')[0], 1)) * parseFloat(msg.content.split('$')[1].split(')')[0]);
             const user = await client.fetchUser(words[1].replace('!', '').split('@')[1].split('>')[0]);
 
             const sendWords = user.lastMessage.content.split(' ');
