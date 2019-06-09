@@ -17,10 +17,10 @@ module.exports = {
                 if(useramount >= item.targetAmount) {
                     const m = await msg.author.send(item._id + ' ' + item.amount + ' ' + item.tokenName + ' for ' + item.targetAmount + ' ' + item.targetName + "\n");
                     await m.react('😄');
-                    size++;
+                    ++size;
                 };
             }
-            if (size-- == 1) msg.reply(message != '' ? message : "No offers found.");
+            if (--size == 1) msg.reply(message != '' ? message : "No offers found.");
         });
         
     }
