@@ -1,6 +1,6 @@
 const { send } = require('../eos.js');
 
-const { val } = require('../value.js');
+const val = require('../value.js');
 module.exports = {
     authors: ['512212602613399552'],
     run: async (msg, dbo) => {
