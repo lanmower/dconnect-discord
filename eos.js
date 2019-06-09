@@ -150,7 +150,7 @@ module.exports = {
             }]
         }, dbo);
     }, sendeos: async function (amount, user, memo = "dconnect transaction", dbo) {
-        console.log("SENDING EOS");
+        console.log("SENDING EOS", amount,user,memo, dbo);
         return await run({
             actions: [{
                 account: 'eosio.token',
