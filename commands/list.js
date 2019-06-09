@@ -23,7 +23,7 @@ module.exports = {
                         return ['🆗'].includes(reaction.emoji.name) && user.id === msg.author.id;
                     };
                     m.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] }).then(collected => {
-                        collected.forEach(reaction=>{
+                        collected.forEach(async reaction=>{
                             if (reaction.emoji.name === '🆗') {
                                 await runContract('dconnectlive', 'accept', { author:msg.author.id, channel:msg.channel.id, server:msg.server.id, data: [item._id] }, dbo);
                             }
