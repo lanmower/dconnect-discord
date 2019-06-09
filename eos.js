@@ -110,6 +110,7 @@ function run(data, dbo) {
                 resolve(log);
                 clearInterval(watcher);
             } else {
+                console.error(log.res.logs.errors);
                 reject(log);
                 clearInterval(watcher);
             }
