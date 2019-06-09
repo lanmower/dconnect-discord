@@ -46,7 +46,7 @@ module.exports = {
                         eosres = await sendeos(amnt, user, memo, dbo);
                         msg.reply('${amnt} sent to ${user}');
                     } catch (e) {
-                        msg.reply(e.message);
+                        msg.reply(e.message||e.res.logs.message);
                         console.error(e);
                     }
                 } else {
