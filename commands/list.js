@@ -9,8 +9,8 @@ module.exports = {
         const words = msg.content.split(' ');
         let message = "";
         let col = (await dbo.collection('dconnectliveoffers'));
-        let size = 0;
-        let state = await col.find().forEach(async (item) => {
+        let size = await col.count();
+        let state = col.find().forEach(async (item) => {
             const useramount = await amount(msg.author.id, item.targetName, dbo);
             if (item.user != msg.author.id) {
                 const itemamount = Number(item.amount).toFixed(4);
@@ -20,9 +20,8 @@ module.exports = {
                     size++;
                 };
             }
-            console.log(size);
+            if (size-- == 1) msg.reply(message != '' ? message : "No offers found.");
         });
-        if (!size) msg.reply(message != '' ? message : "No offers found.");
         
     }
 }
