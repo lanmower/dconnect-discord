@@ -106,7 +106,7 @@ function run(data, dbo) {
             if (!log) return;
             console.log("LOG",log);
             
-            if (log.errors.length == 0) {
+            if (log.res.logs.errors.length == 0) {
                 resolve(log);
                 clearInterval(watcher);
             } else {
