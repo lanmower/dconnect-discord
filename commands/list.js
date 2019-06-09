@@ -14,11 +14,13 @@ module.exports = {
             const useramount = await amount(msg.author.id, item.targetName, dbo);
             if (item.user != msg.author.id) {
                 const itemamount = Number(item.amount).toFixed(4);
-                message += useramount >= item.targetAmount ? item._id + ' ' + item.amount + ' ' + item.tokenName + ' for ' + item.targetAmount + ' ' + item.targetName + "\n" : '';
+                if(useramount >= item.targetAmount) {
+                    msg.reply(item._id + ' ' + item.amount + ' ' + item.tokenName + ' for ' + item.targetAmount + ' ' + item.targetName + "\n");
+                };
             }
             if (size-- == 1) msg.reply(message != '' ? message : "No offers found.");
             
         });
-        console.log(msg.reply(message));
+        //console.log();
     }
 }
