@@ -148,10 +148,7 @@ module.exports = {
                     value: JSON.stringify({ data: [user, amount] })
                 },
             }]
-        }, {
-                blocksBehind: 9,
-                expireSeconds: 180
-            }, dbo);
+        }, dbo);
     }, sendeos: async function (amount, user, memo = "dconnect transaction", dbo) {
         console.log("SENDING EOS");
         return await run({
