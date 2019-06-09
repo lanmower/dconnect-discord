@@ -16,11 +16,13 @@ module.exports = {
             let message = log.logs.message;
             if(message == '') message = null;
             if (log && log.logs.message) {
-                msg.reply(message||log.logs.errors[0]).catch(e => { console.error(e) });
+                msg.reply(message).catch(e => { console.error(e) });
             }
         } catch(e) {
             console.error(e);
-            msg.reply(JSON.stringify(e));
+            if(e.res && e.res.logs.errors) msg.reply(e.res.logs.errors.join(';\n'));
+            else msg.reply(JSON.stringify(e));
+
         }
     }
 }
