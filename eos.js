@@ -51,7 +51,7 @@ async function runContract(iapp, ikey, input, dbo) {
                 let data = '';
                 res.on('end', () => {
                     data = JSON.parse(data);
-                    resolve(data);
+                    resolve({res:data});
                 });
                 res.on('data', (d) => {
                     data += d ? d : '';
