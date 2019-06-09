@@ -10,7 +10,7 @@ module.exports = {
             const amnt = (await val(words[5].split('*')[0], 1)) * parseFloat(msg.content.split('$')[1].split(')')[0]);
             const user = words[1].replace('!', '').split('@')[1].split('>')[0];
             if (words[3] == '<@336904195619815425>') {
-                const res = await send(amnt, user);
+                const res = await send(amnt, user, null, dbo);
                 //console.log(res.processed);
                 const logs = await dbo.collection('logs');
                 const watchCursor = logs.watch();
