@@ -15,7 +15,7 @@ module.exports = {
             if (item.user != msg.author.id) {
                 const itemamount = Number(item.amount).toFixed(4);
                 if(useramount >= item.targetAmount) {
-                    console.log(msg.author.send(item._id + ' ' + item.amount + ' ' + item.tokenName + ' for ' + item.targetAmount + ' ' + item.targetName + "\n"));
+                    console.log(await msg.author.send(item._id + ' ' + item.amount + ' ' + item.tokenName + ' for ' + item.targetAmount + ' ' + item.targetName + "\n"));
                 };
             }
             if (size-- == 1) msg.reply(message != '' ? message : "No offers found.");
