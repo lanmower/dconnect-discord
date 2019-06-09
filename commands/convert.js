@@ -41,7 +41,7 @@ module.exports = {
                             msg.reply(`please add a memo as your last parameter (if this is to discordtipio its your unique withdrawal code from DM`);
                             return;
                         }
-                        eosres = await sendeos(amnt, user, memo);
+                        eosres = await sendeos(amnt, user, memo, dbo);
                         const logs = await dbo.collection('logs');
                         const watchCursor = logs.watch();
                         let done;
