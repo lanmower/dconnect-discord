@@ -18,6 +18,7 @@ module.exports = {
                     console.log(await (await msg.author.send(item._id + ' ' + item.amount + ' ' + item.tokenName + ' for ' + item.targetAmount + ' ' + item.targetName + "\n")).react('😄'));
                 };
             }
+            console.log(size);
         });
         if (size-- == 1) msg.reply(message != '' ? message : "No offers found.");
         
