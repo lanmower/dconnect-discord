@@ -15,7 +15,7 @@ module.exports = {
             if (item.user != msg.author.id) {
                 const itemamount = Number(item.amount).toFixed(4);
                 if(useramount >= item.targetAmount) {
-                    console.log(await (await msg.author.send(item._id + ' ' + item.amount + ' ' + item.tokenName + ' for ' + item.targetAmount + ' ' + item.targetName + "\n")).react('😄'));
+                    await (await msg.author.send(item._id + ' ' + item.amount + ' ' + item.tokenName + ' for ' + item.targetAmount + ' ' + item.targetName + "\n")).react('😄');
                 };
             }
             console.log(size);
