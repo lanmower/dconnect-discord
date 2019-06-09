@@ -18,9 +18,11 @@ async function runContract(iapp, ikey, input, dbo) {
     let key = ikey;
     let cont = await contract(app, key, dbo);
     if (!cont) {
-        cont = await contract('dconnectlive', key, dbo);
-        if (!cont) throw new Error(`action not found: ${key} on dconnectlive`);
+        cont = await contract('dconnectlive', app, dbo);
+
+        if (!cont) throw new Error(`action not found: ${app} on dconnectlive`);
         app = 'dconnectlive';
+        key = iapp;
     } else {
         //data.data.shift();
     }
