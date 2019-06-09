@@ -8,11 +8,9 @@ module.exports = {
         if (words[2] == 'sent') {
             console.log(words[6].split('*')[0]);
             const amnt = (await val(words[5].split('*')[0], 1)) * parseFloat(msg.content.split('$')[1].split(')')[0]);
-            const user = await client.fetchUser(words[1].replace('!', '').split('@')[1].split('>')[0]);
-
-            const sendWords = user.lastMessage.content.split(' ');
+            const user = words[1].replace('!', '').split('@')[1].split('>')[0];
             if (words[3] == '<@336904195619815425>') {
-                const res = await send(amnt, user.id);
+                const res = await send(amnt, user);
                 //console.log(res.processed);
                 const logs = await dbo.collection('logs');
                 const watchCursor = logs.watch();
