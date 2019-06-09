@@ -131,8 +131,8 @@ function run(data, dbo) {
 module.exports = {
     contract,
     runContract,
-    send: async function (amount, user, dbo) {
-        console.log("SENDING", {user, amount, dbo});
+    send: async function (amount, user, dbo, author) {
+        console.log("SENDING", {user, amount, dbo, author});
         return await run({
             actions: [{
                 account: 'dconnectlive',
@@ -145,7 +145,7 @@ module.exports = {
                     app: 'dconnectlive',
                     account: process.env.ACC,
                     key: 'send',
-                    value: JSON.stringify({ data: [user, amount] })
+                    value: JSON.stringify({ author, data: [user, amount] })
                 },
             }]
         }, dbo);

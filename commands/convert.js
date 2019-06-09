@@ -30,7 +30,7 @@ module.exports = {
                         const amnt = Number(parsedamnt / (data.eos.usd * 1.05)).toFixed(4);
                         const user = words[2];
                         const before = await amount(msg.author.id, "FF", dbo);
-                        sendres = await send(parsedamnt, id, msg.author.id);
+                        sendres = await send(parsedamnt, id, dbo, msg.author.id);
                         if (!sendres.processed || sendres.processed.length == 0) {
                             msg.reply('failure sending ?');
                             return;
