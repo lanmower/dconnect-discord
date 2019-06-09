@@ -19,8 +19,8 @@ module.exports = {
                 msg.reply(message||log.logs.errors[0]).catch(e => { console.error(e) });
             }
         } catch(e) {
-            console.error(e.stack);
-            msg.reply(e.message||log.logs.error[0]);
+            console.error(e);
+            msg.reply(JSON.stringify(e));
         }
     }
 }
