@@ -105,7 +105,8 @@ function run(data, dbo) {
             const log = await logs.findOne({ id: res.transaction_id });
             if (!log) return;
             console.log("LOG",log);
-            if (log.logs.errors.length == 0) {
+            
+            if (log.errors.length == 0) {
                 resolve(log);
                 clearInterval(watcher);
             } else {
