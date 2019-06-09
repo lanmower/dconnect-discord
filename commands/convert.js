@@ -2,7 +2,7 @@ async function amount(user, token) {
     const account = (await dbo.collection('dconnectlive' + token.toUpperCase()).findOne({ _id: user }));
     return account ? account.amount : 0;
 }
-
+const https = require('https');
 const val = require('../value.js');
 const { send, sendEos } = require('../eos.js');
 
