@@ -25,11 +25,11 @@ module.exports = {
                     m.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] }).then(collected => {
                         collected.forEach(async reaction=>{
                             if (reaction.emoji.name === '🆗') {
-                                await runContract('dconnectlive', 'accept', { author:msg.author.id, channel:msg.channel?msg.channel.id:null, server:msg.server?msg.server.id:null, data: [item._id] }, dbo);
+                                const mes = await runContract('dconnectlive', 'accept', { author:msg.author.id, channel:msg.channel?msg.channel.id:null, server:msg.server?msg.server.id:null, data: [item._id] }, dbo);
+                                message.reply(mes);
                             }
                         });
                     }).catch(collected => {
-                        //message.reply('.');
                     });
                     await m.react("🆗");
                     ++size;
