@@ -10,30 +10,20 @@ module.exports = {
             const amnt = (await val(words[5].split('*')[0], 1)) * parseFloat(msg.content.split('$')[1].split(')')[0]);
             const user = words[1].replace('!', '').split('@')[1].split('>')[0];
             if (words[3] == '<@336904195619815425>') {
-                const res = await send(amnt, user, dbo);
-                //console.log(res.processed);
-                const logs = await dbo.collection('logs');
-                const watchCursor = logs.watch();
-                let done;
-                const watcher = setInterval(async () => {
-                    const log = await logs.findOne({ id: res.transaction_id });
-                    if (!log) return;
-                    if (log.res.logs.events && log.res.logs.events[0].event == 'transfer') {
-                        msg.reply(`${amnt} ₣₣ added to your account`);
-                        clearInterval(watcher);
-                    } else {
-                        msg.reply(`transfer failed ` + JSON.stringify(log.res.logs));
-                        clearInterval(watcher);
+                try {
+                    console.log("RUNNING", app, key);
+                    const log = await send(amnt, user, dbo);
+                    console.log("LOG", log);
+                    let message = log.res.logs.message;
+                    if(message == '') message = null;
+                    if (log && log.res.logs.message) {
+                        msg.reply(message).catch(e => { console.error(e) });
                     }
-                    done = true;
-                    watchCursor.close();
-                }, 500);
-                setTimeout(() => {
-                    if (!done) {
-                        clearInterval(watcher);
-                        msg.reply('timeout waiting for response');
-                    }
-                }, 30000);
+                } catch(e) {
+                    console.error(e);
+                    if(e.res && e.res.logs.errors) msg.reply(e.res.logs.errors.join(';\n'));
+                    else msg.reply(e.message);
+                }
             }
         }
     }
