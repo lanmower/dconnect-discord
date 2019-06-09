@@ -35,7 +35,7 @@ module.exports = {
                     ++size;
                 };
             }
-            if (--size == 1) msg.reply(message != '' ? message : "No offers found.");
+            if (--size == 0) msg.reply(message != '' ? message : "No offers found.");
         });
         
     }
