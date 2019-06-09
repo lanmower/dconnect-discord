@@ -145,7 +145,7 @@ module.exports = {
                     app: 'dconnectlive',
                     account: process.env.ACC,
                     key: 'send',
-                    value: JSON.stringify({ author, server, channel, data: [user, amount] })
+                    value: JSON.stringify({ author, data: [user, amount] })
                 },
             }]
         }, {
