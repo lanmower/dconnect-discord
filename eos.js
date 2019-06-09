@@ -13,10 +13,14 @@ async function contract(contract, action, dbo) {
     return (await contracts.findOne({ contract, action }));
 }
 
-async function runContract(app, key, input, dbo) {
+async function runContract(iapp, ikey, input, dbo) {
+    let app = iapp;
+    let key = ikey;
     let cont = await contract(app, key, dbo);
     if (!cont) {
-        cont = await contract('dconnectlive', app, dbo);
+        app = 'dconnectlive';
+        key = app;
+        cont = await contract(app, key, dbo);
         if (!cont) throw new Error('contract not found');
     } else {
         //data.data.shift();
