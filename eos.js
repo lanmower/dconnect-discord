@@ -112,6 +112,9 @@ function run(data, dbo) {
             //console.log("LOG",log);
             
             if (log.res.logs.errors.length == 0) {
+                if(log.res.logs.message) {
+                    log.res.logs.message += '\n\nhttps://bloks.io/transaction/'+log.id;
+                }
                 resolve(log);
                 clearInterval(watcher);
             } else {
