@@ -13,7 +13,11 @@ module.exports = {
         const server = msg.guild ? msg.guild.id : null;
         try {
             const log = await runContract(app, key, { author, channel, server, data: words }, dbo);
-            if (log && log.logs.message) msg.reply(log.logs.message).catch(e => { console.error(e) });
+            let message = log.logs.message;
+            if(message == '') message = null;
+            if (log && log.logs.message) {
+                msg.reply(message||log.logs.errors[0]).catch(e => { console.error(e) });
+            }
         } catch(e) {
             console.error(e.stack);
             msg.reply(e.message||log.logs.error[0]);
