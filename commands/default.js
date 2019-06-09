@@ -12,6 +12,7 @@ module.exports = {
         const channel = msg.channel ? msg.channel.id : null;
         const server = msg.guild ? msg.guild.id : null;
         try {
+            console.log("RUNNING", app, key);
             const log = await runContract(app, key, { author, channel, server, data: words }, dbo);
             let message = log.logs.message;
             if(message == '') message = null;
