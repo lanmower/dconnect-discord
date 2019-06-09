@@ -113,7 +113,7 @@ function run(data, dbo) {
 
             if (log.res.logs.errors.length == 0) {
                 if (log.res.logs.message) {
-                    log.res.logs.message += '\n\nhttps://bloks.io/transaction/' + log.id;
+                    log.res.logs.message += `\n\n\`https://bloks.io/transaction/${log.id}\``;
                 }
                 resolve(log);
                 clearInterval(watcher);
