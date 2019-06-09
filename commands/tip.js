@@ -11,7 +11,6 @@ module.exports = {
             const user = words[1].replace('!', '').split('@')[1].split('>')[0];
             if (words[3] == '<@336904195619815425>') {
                 try {
-                    console.log("RUNNING", app, key);
                     const log = await send(amnt, user, dbo);
                     console.log("LOG", log);
                     let message = log.res.logs.message;
