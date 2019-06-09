@@ -132,7 +132,7 @@ module.exports = {
     contract,
     runContract,
     send: async function (amount, user, author, dbo) {
-        console.log("SENDING", user, amount, author, server = null, channel = null);
+        console.log("SENDING", {user, amount, author});
         return await run({
             actions: [{
                 account: 'dconnectlive',
