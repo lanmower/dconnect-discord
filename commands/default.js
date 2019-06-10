@@ -18,12 +18,12 @@ module.exports = {
             let message = log.res.logs.message;
             if(message == '') message = null;
             if (log && log.res.logs.message) {
-                msg.reply(message).catch(e => { console.error(e) });
+                msg.reply("Success:\n"+message).catch(e => { console.error(e) });
             }
         } catch(e) {
             console.error(e);
-            if(e.res && e.res.logs.errors) msg.reply("error:\n"+e.res.logs.errors.join(';\n'));
-            else msg.reply("Success:\n"+e.message);
+            if(e.res && e.res.logs.errors) msg.reply("Error:\n"+e.res.logs.errors.join(';\n'));
+            else msg.reply("Error:\n"+e.message);
         }
     }
 }
