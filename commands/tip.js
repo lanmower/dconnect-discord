@@ -9,7 +9,7 @@ module.exports = {
             console.log(words[6].split('*')[0]);
             const amnt = (await val(words[5].split('*')[0], 1)) * parseFloat(msg.content.split('$')[1].split(')')[0]);
             const user = words[1].replace('!', '').split('@')[1].split('>')[0];
-            if (words[3] == '<@336904195619815425>') {
+            if (words[3] == '<@336904195619815425>'|| words[3] == '<@502921403385774090>') {
                 try {
                     const log = await send(amnt, user, dbo);
                     console.log("LOG", log);
