@@ -14,7 +14,7 @@ module.exports = {
         try {
             console.log("RUNNING", app, key);
             const log = await runContract(app, key, { author, channel, server, data: words }, dbo);
-            console.log("LOG", log);
+            //console.log("LOG", log);
             let message = log.res.logs.message;
             if(message == '') message = null;
             if (log && log.res.logs.message) {
@@ -22,8 +22,8 @@ module.exports = {
             }
         } catch(e) {
             console.error(e);
-            if(e.res && e.res.logs.errors) msg.reply(e.res.logs.errors.join(';\n'));
-            else msg.reply(e.message);
+            if(e.res && e.res.logs.errors) msg.reply("error:\n"+e.res.logs.errors.join(';\n'));
+            else msg.reply("Success:\n"+e.message);
         }
     }
 }
