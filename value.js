@@ -2,7 +2,7 @@ const CoinGecko = require('coingecko-api');
 
 const CoinGeckoClient = new CoinGecko();
 
-var data;
+var list;
 const val = async (symbol, input, gt = false) => {
   try {
     if (!list) await run();
@@ -25,7 +25,7 @@ const val = async (symbol, input, gt = false) => {
 }
 
 async function run() {
-  data = (await CoinGeckoClient.coins.list()).data;
+  list = (await CoinGeckoClient.coins.list()).data;
 }
 
 run();
