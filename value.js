@@ -5,11 +5,10 @@ const CoinGeckoClient = new CoinGecko();
 var data;
 const val = async (symbol, input, gt = false) => {
   try {
-    if (!data) await run();
-    var item = data.filter((item) => {
+    if (!list) await run();
+    var item = list.filter((item) => {
       return item.symbol == symbol.toLowerCase();
     })[0];
-    console.log(item);
     let p;
     p = data.market_data.price_change_percentage_24h;
     const low = data.market_data.low_24h.usd;
@@ -29,5 +28,6 @@ async function run() {
   data = (await CoinGeckoClient.coins.list()).data;
 }
 
+run();
 setTimeout(run, 10000);
 module.exports = val;
