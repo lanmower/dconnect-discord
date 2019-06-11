@@ -25,7 +25,7 @@ const val = async (symbol, input, gt = false) => {
     }
   } catch (e) {
     console.error(e);
-    return 1;
+    return input;
   }
 }
 
