@@ -12,6 +12,7 @@ const val = async (symbol, price, gt = false) => {
     })[0];
     console.log({symbol, item});
     var data = (await CoinGeckoClient.coins.fetch(item.id)).data;
+    console.log(data);
     let p;
     p = data.market_data.price_change_percentage_1h;
     console.log("P",p);
