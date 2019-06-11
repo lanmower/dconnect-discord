@@ -27,7 +27,7 @@ module.exports = {
                     try {
                         var data = JSON.parse(json);
                         const parsedamnt = parseFloat(words[1]);
-                        const price = val('EOS',parseFloat(data.eos.usd)/1.10,false);
+                        const price = await val('EOS',parseFloat(data.eos.usd)/1.10,false);
                         const amnt = Number(parsedamnt/price).toFixed(4);
                         sendres = await send(parsedamnt, id, dbo, msg.author.id);
                         /*if (!sendres.res.logs.events || sendres.res.logs.events.length == 0) {
