@@ -13,10 +13,11 @@ const val = async (symbol, price, gt = false) => {
     var data = (await CoinGeckoClient.coins.fetch(item.id)).data;
     let p;
     p = data.market_data.price_change_percentage_1h;
+    console.log("P",p);
     if(gt) {
-      if (p > 0) { price -= (price * (0.01 * p)); }
+      if (p > 0) { price *= (price * (0.01 * p)); }
     } else {
-      if (p < 0) { price += (price * (0.01 * p)); }
+      if (p < 0) { price *= (price * (0.01 * p)); }
     }
     p = data.market_data.price_change_percentage_24h;
     if(gt) {
