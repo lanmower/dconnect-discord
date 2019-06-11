@@ -5,8 +5,8 @@ const CoinGeckoClient = new CoinGecko();
 var data;
 const val = async (symbol, input, gt = false) => {
   try {
-    if (!list) await run();
-    var item = list.filter((item) => {
+    if (!data) await run();
+    var item = data.filter((item) => {
       return item.symbol == symbol.toLowerCase();
     })[0];
     let p;
@@ -28,6 +28,5 @@ async function run() {
   data = (await CoinGeckoClient.coins.list()).data;
 }
 
-run();
 setTimeout(run, 10000);
 module.exports = val;
