@@ -10,6 +10,7 @@ const val = async (symbol, price, gt = false) => {
     var item = list.filter((item) => {
       return item.symbol == symbol.toLowerCase();
     })[0];
+    console.log({symbol, item});
     var data = (await CoinGeckoClient.coins.fetch(item.id)).data;
     let p;
     p = data.market_data.price_change_percentage_1h;
