@@ -3,7 +3,7 @@ const CoinGecko = require('coingecko-api');
 const CoinGeckoClient = new CoinGecko();
 
 var list;
-const val = async (symbol, input, gt = false) => {
+const val = async (symbol, input, highsel=true) => {
   try {
     if (!list) await run();
     var item = list.filter((item) => {
@@ -15,10 +15,10 @@ const val = async (symbol, input, gt = false) => {
     const low = data.market_data.low_24h.usd;
     const high = data.market_data.high_24h.usd;
     const current = data.market_data.current_price.usd;
-    const gtret = input*(low/current);
-    const ltret = input*(high/current);
+    const lowret = input*(low/current);
+    const highret = input*(high/current);
     console.log({low, current, high, gtret, ltret}) 
-    return gt?gtret:ltret;
+    return highsel?low:high;
   } catch (e) {
     console.error(e);
     return input;
