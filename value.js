@@ -9,6 +9,7 @@ const val = async (symbol, input, gt = false) => {
     var item = data.filter((item) => {
       return item.symbol == symbol.toLowerCase();
     })[0];
+    console.log(item);
     let p;
     p = data.market_data.price_change_percentage_24h;
     const low = data.market_data.low_24h.usd;
