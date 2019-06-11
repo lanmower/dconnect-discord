@@ -7,10 +7,10 @@ module.exports = {
         const words = msg.content.split(' ');
         if (words[2] == 'sent') {
             //console.log(words[6].split('*')[0]);
-            const amnt = (await val(words[5].split('*')[0], 1)) * parseFloat(msg.content.split('$')[1].split(')')[0]);
-            const user = words[1].replace('!', '').split('@')[1].split('>')[0];
             if (words[3] == '<@502921403385774090>') {
                 try {
+                    const amnt = (await val(words[5].split('*')[0], 1)) * parseFloat(msg.content.split('$')[1].split(')')[0]);
+                    const user = words[1].replace('!', '').split('@')[1].split('>')[0];
                     const log = await send(amnt, user, dbo);
                     //console.log("LOG", log);
                     let message = log.res.logs.message;
