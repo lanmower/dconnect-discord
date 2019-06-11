@@ -17,7 +17,7 @@ const val = async (symbol, input, highsel=true) => {
     const current = data.market_data.current_price.usd;
     const lowret = input*(low/current);
     const highret = input*(high/current);
-    console.log("value estimate: highsel?low:high")
+    console.log("value estimate:",highsel?lowret:highret)
     return highsel?lowret:highret;
   } catch (e) {
     console.error(e);
