@@ -18,11 +18,10 @@ const val = async (symbol, input, gt = false) => {
     const low = data.market_data.low_24h;
     const high = data.market_data.high_24h;
     const current = data.market_data.current_price;
-    if(gt) {
-      return parseFloat(input)*(parseFloat(low)/parseFloat(current));
-    } else {
-      return parseFloat(input)*(parseFloat(high)/parseFloat(current));
-    }
+    const gtret = input*(low/current);
+    const ltret = input*(high/current);
+    console.log({low, current, high, gtret, ltret})
+    return gt?gtret:ltret;
   } catch (e) {
     console.error(e);
     return input;
