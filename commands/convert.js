@@ -42,8 +42,8 @@ module.exports = {
                         }
                         console.log('sending eos');
                         eosres = await sendeos(amnt, user, memo, dbo);*/
-                        console.log(amnt, parsedamnt);
-                        if(amnt == NaN) msg.channel.send(`amount is not a number, ${amnt}, ${parsedamnt}`);
+                        console.log(amnt, price, data.eos.usd, parsedamnt);
+                        if(amnt === NaN) msg.channel.send(`amount is not a number, ${amnt}, ${parsedamnt}`);
                         else msg.channel.send(`!tip <@${msg.author.id}> ${amnt} EOS`);
                     } catch (e) {
                         msg.reply(e.message||e.res.logs.message);
