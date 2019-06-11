@@ -17,7 +17,7 @@ const val = async (symbol, input, gt = false) => {
     const current = data.market_data.current_price;
     const gtret = input*(low/current);
     const ltret = input*(high/current);
-    console.log({low, current, high, gtret, ltret})
+    console.log({low, current, high, gtret, ltret}) 
     return gt?gtret:ltret;
   } catch (e) {
     console.error(e);
