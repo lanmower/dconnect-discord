@@ -19,9 +19,9 @@ const val = async (symbol, input, gt = false) => {
     const high = data.market_data.high_24h;
     const current = data.market_data.current_price;
     if(gt) {
-      return input*(low/current);
+      return parseFloat(input)*(parseFloat(low)/parseFloat(current));
     } else {
-      return input*(high/current);
+      return parseFloat(input)*(parseFloat(high)/parseFloat(current));
     }
   } catch (e) {
     console.error(e);
