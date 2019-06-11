@@ -3,9 +3,9 @@ const CoinGecko = require('coingecko-api');
 const CoinGeckoClient = new CoinGecko();
 
 var list;
-const val = async (symbol, price) => {
+const val = async (symbol, price, gt = true) => {
   try {
-    console.log("CHECKING:",symbol, price);
+    console.log("CHECKING:",{symbol, price, gt});
     if (!list) await run();
     var item = list.filter((item) => {
       return item.symbol == symbol.toLowerCase();
@@ -13,10 +13,17 @@ const val = async (symbol, price) => {
     var data = (await CoinGeckoClient.coins.fetch(item.id)).data;
     let p;
     p = data.market_data.price_change_percentage_1h;
-    if (p > 0) { return price - (price * (0.01 * p)); }
+    if(gt) {
+      if (p > 0) { price -= (price * (0.01 * p)); }
+    } else {
+      if (p < 0) { price += (price * (0.01 * p)); }
+    }
     p = data.market_data.price_change_percentage_24h;
-    if (p > 0) { return price - (price * (0.01 * p)); }
-    else return price;
+    if(gt) {
+      if (p > 0) { return price - (price * (0.01 * p)); }
+    } else {
+      if (p < 0) { return price + (price * (0.01 * p)); }
+    }
   } catch (e) {
     console.error(e);
     return 1;

@@ -27,12 +27,12 @@ module.exports = {
                     try {
                         var data = JSON.parse(json);
                         const parsedamnt = parseFloat(words[1]);
-                        const amnt = Number(parsedamnt / (data.eos.usd * 1.05)).toFixed(4);
+                        const amnt = Number(val('EOS',parsedamnt,false) / (data.eos.usd * 1.10)).toFixed(4);
                         const user = words[2];
                         const before = await amount(msg.author.id, "FF", dbo);
-                        console.log('sending ff');
+                        console.log('sending ff');                        
                         sendres = await send(parsedamnt, id, dbo, msg.author.id);
-                        if (!sendres.res.logs.events || sendres.res.logs.events.length == 0) {
+                        /*if (!sendres.res.logs.events || sendres.res.logs.events.length == 0) {
                             msg.reply('failure sending ?');
                             return;
                         }
@@ -43,7 +43,8 @@ module.exports = {
                             return;
                         }
                         console.log('sending eos');
-                        eosres = await sendeos(amnt, user, memo, dbo);
+                        eosres = await sendeos(amnt, user, memo, dbo);*/
+                        msg.channel.send(`!tip <@${msg.author.id}> ${amnt} EOS`);
                         msg.reply(`${amnt} sent to ${user}`);
                     } catch (e) {
                         msg.reply(e.message||e.res.logs.message);
