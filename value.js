@@ -24,6 +24,7 @@ const val = async (symbol, price, gt = true) => {
     } else {
       if (p < 0) { return price + (price * (0.01 * p)); }
     }
+    return price;
   } catch (e) {
     console.error(e);
     return 1;
