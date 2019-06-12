@@ -67,7 +67,7 @@ async function start() {
   });
 
   client.on('message', async msg => {
-    console.log(msg.author.id, msg.content);
+    //console.log(msg.author.id, msg.content);
 
     const words = msg.content.replace(/  /gi, ' ').split(' ');
     let ran = false;
