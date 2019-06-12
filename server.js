@@ -59,11 +59,11 @@ async function start() {
   });
 
   client.on('messageReactionAdd', (reaction, user) => {
-    console.log(`${user.username} reacted with "${reaction.emoji.name}" to ${reaction.message.id}.`);
+    //console.log(`${user.username} reacted with "${reaction.emoji.name}" to ${reaction.message.id}.`);
   });
 
   client.on('messageReactionRemove', (reaction, user) => {
-    console.log(`${user.username} removed their "${reaction.emoji.name}" reaction.`);
+    //console.log(`${user.username} removed their "${reaction.emoji.name}" reaction.`);
   });
 
   client.on('message', async msg => {
@@ -73,7 +73,10 @@ async function start() {
     let ran = false;
     waiting = waiting.filter((item)=>{
       console.log('processing', item.run(msg));
-      if(item.time+item.expiry > new Date().getTime()) return false;
+      if(item.time+item.expiry > new Date().getTime()) {
+        console.log('timeout');
+        return false;
+      } 
       return item.run(msg);
     });    
     if (msg.content[0] == '&') {
