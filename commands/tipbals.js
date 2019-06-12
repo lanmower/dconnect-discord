@@ -7,6 +7,7 @@ module.exports = {
                 console.log("FOUND", msg.content);
                 return false;
             }
+            console.log('not found so far', msg.content);
             return true;
         }})
     }
