@@ -72,7 +72,7 @@ async function start() {
     const words = msg.content.replace(/  /gi, ' ').split(' ');
     let ran = false;
     waiting = waiting.filter((item)=>{
-      console.log('processing', item.run(msg));
+      console.log('processing', item.time+item.expiry);
       if(item.time+item.expiry > new Date().getTime()) {
         console.log('timeout');
         return false;
