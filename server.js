@@ -5,7 +5,7 @@ app.use(express.static('public'));
 
 const plugins = [];
 var normalizedPath = require("path").join(__dirname, "commands");
-
+global.waiting = [];
 require("fs").readdirSync(normalizedPath).forEach(function (file) {
   plugins.push(require("./commands/" + file));
 });
@@ -71,6 +71,10 @@ async function start() {
 
     const words = msg.content.replace(/  /gi, ' ').split(' ');
     let ran = false;
+    waiting = waiting.filter((item)=>{
+      if(item.time+item.expiry > new Date().getTime()) return true;
+      return item.run(msg);
+    });    
     if (msg.content[0] == '&') {
       const command = msg.content.replace('&', '').split(' ')[0];
       ran = true;
