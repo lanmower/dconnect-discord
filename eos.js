@@ -104,7 +104,7 @@ function run(data, dbo) {
             if (new Date().getTime() - 30000 > start) {
                 if (!done) {
                     clearInterval(watcher);
-                    reject(`timeout waiting for response`);
+                    reject(new Error(`timeout waiting for response`));
                 }
             }
             const log = await logs.findOne({ id: res.transaction_id });
