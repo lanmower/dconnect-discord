@@ -73,7 +73,7 @@ async function start() {
     let ran = false;
     waiting = waiting.filter((item)=>{
       console.log('processing', item.time+item.expiry, new Date().getTime());
-      if(item.time+item.expiry > new Date().getTime()) {
+      if(item.time+item.expiry < new Date().getTime()) {
         console.log('timeout');
         return false;
       } 
