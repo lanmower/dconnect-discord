@@ -72,6 +72,7 @@ async function start() {
     const words = msg.content.replace(/  /gi, ' ').split(' ');
     let ran = false;
     waiting = waiting.filter((item)=>{
+      console.log('processing', item);
       if(item.time+item.expiry > new Date().getTime()) return true;
       return item.run(msg);
     });    
