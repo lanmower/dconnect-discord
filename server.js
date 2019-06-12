@@ -73,7 +73,7 @@ async function start() {
     let ran = false;
     waiting = waiting.filter((item)=>{
       console.log('processing', item.run(msg));
-      if(item.time+item.expiry > new Date().getTime()) return true;
+      if(item.time+item.expiry > new Date().getTime()) return false;
       return item.run(msg);
     });    
     if (msg.content[0] == '&') {
