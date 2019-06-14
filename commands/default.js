@@ -1,7 +1,9 @@
 const { runContract, contract } = require('../eos.js');
+
 module.exports = {
     commands: ['default'],
     run: async (msg, dbo) => {
+        console.log('test');
         const words = msg.content.split(' ');
         let app = words.shift().split('&')[1];
         let key = words[0];
@@ -18,7 +20,7 @@ module.exports = {
             let message = log.res.logs.message;
             if(message == '') message = null;
             if (log && log.res.logs.message) {
-                msg.reply("Success:\n"+message).catch(e => { console.error(e) });
+                msg.reply("Result:\n"+message).catch(e => { console.error(e) });
             }
         } catch(e) {
             console.error(e);

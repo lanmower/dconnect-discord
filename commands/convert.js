@@ -11,9 +11,10 @@ module.exports = {
     run: async (msg, dbo) => {
         const words = msg.content.split(' ');
         const id = words[1].replace('<@!', '').replace('>', '');
+        const currency = words[2].toLowerCase();
         var options = {
             host: 'api.coingecko.com',
-            path: '/api/v3/simple/price?ids=eos&vs_currencies=usd',
+            path: '/api/v3/simple/price?ids='+currency+'&vs_currencies=usd',
             headers: { 'User-Agent': 'request' }
         };
         https.get(options, function (res) {
@@ -21,30 +22,34 @@ module.exports = {
             res.on('data', function (chunk) {
                 json += chunk;
             });
-            let eosres, sendres;
+            let  sendres;
             res.on('end', async function () {
                 if (res.statusCode === 200) {
                     try {
                         var data = JSON.parse(json);
                         const parsedamnt = parseFloat(words[1]);
-                        const price = await val('EOS',parseFloat(data.eos.usd),false);
+                        const price = await val(words[2],parseFloat(data[currency].usd),false);
                         const amnt = Number((parsedamnt*0.9)/price).toFixed(4);
-                        //sendres = await send(parsedamnt, id, dbo, msg.author.id);
-                        /*if (!sendres.res.logs.events || sendres.res.logs.events.length == 0) {
-                            msg.reply('failure sending ?');
-                            return;
-                        }
-                        let memo;
-                        if (words.length == 4) memo = words[3];
-                        if (!memo) {
-                            msg.reply(`please add a memo as your last parameter (if this is to discordtipio its your unique withdrawal code from DM`);
-                            return;
-                        }
-                        console.log('sending eos');
-                        eosres = await sendeos(amnt, user, memo, dbo);*/
-                        console.log(amnt, price, data.eos.usd, parsedamnt);
-                        if(isNaN(amnt)) msg.channel.send(`amount is not a number, ${amnt}, ${parsedamnt}`);
-                        else msg.channel.send(`!tip <@${msg.author.id}> ${amnt} EOS`);
+        msg.channel.send("!bal "+currency);
+        waiting.push({time:new Date().getTime(), expiry:180000, run:async (response)=>{
+            if(response.author.id == '512212602613399552') {
+                try {
+		    const balance = parseFloat(response.embeds[0].fields[0].value.split('**')[1].split('**')[0].split(' ')[0]);
+                    sendres = await send(parsedamnt, '502921403385774090', dbo, msg.author.id);
+                    console.log(amnt, price, data[currency].usd, parsedamnt);
+
+                    if(isNaN(amnt)) msg.channel.send(`amount is not a number, ${amnt}, ${parsedamnt}`);
+                    else if(balance<parsedamnt) msg.channel.send(`not enough balance to do conversion`);
+                    else msg.channel.send(`!tip <@${msg.author.id}> ${amnt} `+currency);
+                } catch(err){
+                    console.error(err); 
+                };
+                return false;
+            }
+            console.log('not found so far', response.content);
+            return true;
+        }})
+
                     } catch (e) {
                         msg.reply(e.message||e.res.logs.message);
                         console.error(e);

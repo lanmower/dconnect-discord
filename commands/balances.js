@@ -1,4 +1,5 @@
 async function amount(user, token, dbo) {
+    console.log(dbo);
     const account = (await dbo.collection('dconnectlive' + token.toUpperCase()).findOne({ _id: user }));
     return account ? account.amount : 0;
 }
@@ -16,6 +17,6 @@ module.exports = {
                 message += amnt ? amnt + ' ' + item._id + "\n" : '';
                 if (size-- == 1) msg.reply(message);
             });
-        } else msg.reply((await amount(msg.author.id, token)) + ' ' + token);
+        } else msg.reply((await amount(msg.author.id, token, dbo)) + ' ' + token);
     }
 }

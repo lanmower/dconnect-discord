@@ -101,10 +101,10 @@ function run(data, dbo) {
         let done;
         const start = new Date().getTime();
         const watcher = setInterval(async () => {
-            if (new Date().getTime() - 30000 > start) {
+            if (new Date().getTime() - 90000 > start) {
                 if (!done) {
                     clearInterval(watcher);
-                    reject(new Error(`timeout waiting for response`));
+                    reject(new Error(`timeout waiting for result of transaction`));
                 }
             }
             const log = await logs.findOne({ id: res.transaction_id });
@@ -119,7 +119,7 @@ function run(data, dbo) {
                 clearInterval(watcher);
             } else {
                 console.error(log.res.logs.errors);
-                reject(log);
+                throw new Error(log.res.logs.errors);
                 clearInterval(watcher);
             }
             done = true;

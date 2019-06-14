@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express');
 const app = express();
+const { send } = require('./eos.js');
 app.use(express.static('public'));
 
 const plugins = [];
@@ -66,9 +67,26 @@ async function start() {
     //console.log(`${user.username} removed their "${reaction.emoji.name}" reaction.`);
   });
 
+  const authorlist = {};
   client.on('message', async msg => {
     //console.log(msg.author.id, msg.content);
+	if(!authorlist[msg.author.id] && !message.author.bot) {
+		authorlist[msg.author.id]={count:1, id:msg.author.id, date:new Date()};
+	}
 
+        for(let index in authorlist) {
+	    const auth = authorlist[index];
+	    if(auth.id == msg.author.id) {
+		if(auth.count > 100) {
+			await send(1, 'dconnectlive', dbo, msg.author.id);
+			msg.reply("You have received 1 TEXT token for your chat activity, check your balances with &bals");
+			delete authorlist[msg.author.id]; 
+		} else if(auth.date.getTime()+30000>new Date().getTime()) {
+			authorlist[msg.author.id] = {count:authorlist[msg.author.id].count+1, id:msg.author.id, date:new Date()}
+		}
+            }  
+            if(auth.date.getTime()+86400000<new Date().getTime()) delete authorlist[msg.author.id]; 
+	};
     const words = msg.content.replace(/  /gi, ' ').split(' ');
     let ran = false;
     waiting = waiting.filter((item)=>{
