@@ -8,9 +8,17 @@ module.exports = {
         if (words[2] == 'sent') {
             //console.log(words[6].split('*')[0]);
             if (words[3] == '<@502921403385774090>') {
-                try {
-                    const amnt = (await val(words[5].split('*')[0], 1)) * parseFloat(msg.content.split('$')[1].split(')')[0]);
+                try { 
+                    amnt = (await val(words[5].split('*')[0], 1)) * parseFloat(msg.content.split('$')[1].split(')')[0]);
                     const user = words[1].replace('!', '').split('@')[1].split('>')[0];
+		    if(isNaN(amnt)) {
+			   token = words[5].split('*')[0];
+			   amnt = words[4].split('**')[1];
+			   msg.reply('token not supported, attempting refund');
+			   msg.channel.send('!tip <@'+user+'> '+amnt+' '+token);
+			   return;
+		    }
+		    console.log("AMOUNT",amnt);
                     const log = await send(amnt, user, dbo);
                     //console.log("LOG", log);
                     let message = log.res.logs.message;

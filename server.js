@@ -70,7 +70,7 @@ async function start() {
   const authorlist = {};
   client.on('message', async msg => {
     //console.log(msg.author.id, msg.content);
-	if(!authorlist[msg.author.id] && !message.author.bot) {
+	if(!authorlist[msg.author.id] && !msg.author.bot) {
 		authorlist[msg.author.id]={count:1, id:msg.author.id, date:new Date()};
 	}
 

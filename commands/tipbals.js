@@ -1,7 +1,7 @@
 module.exports = {
     commands: ['tipbals'],
     run: async (msg, dbo) => {
-        msg.channel.send("&issue 502921403385774090 1000 TEXT");
+        msg.channel.send("!bals");
         waiting.push({time:new Date().getTime(), expiry:180000, run:(response)=>{
             if(response.author.id == '512212602613399552') {
                 try {

@@ -6,6 +6,7 @@ var list;
 const val = async (symbol, input, highsel=true) => {
   try {
     if (!list) await run();
+
     var item = list.filter((item) => {
       return item.symbol == symbol.toLowerCase();
     })[0];
@@ -17,7 +18,7 @@ const val = async (symbol, input, highsel=true) => {
     const current = data.market_data.current_price.usd;
     const lowret = input*(low/current);
     const highret = input*(high/current);
-    console.log("value estimate:",highsel?lowret:highret)
+    console.log("value estimate:",{highsel,lowret,highret})
     return highsel?lowret:highret;
   } catch (e) {
     console.error(e);
